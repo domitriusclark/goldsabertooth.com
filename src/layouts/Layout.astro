@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { title = "Goldsabertooth" } = Astro.props;
+const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -25,106 +26,121 @@ const { title = "Goldsabertooth" } = Astro.props;
     class="flex flex-col bg-black m-0 p-0 w-full h-screen overflow-hidden font-['Helvetica_Neue',_Helvetica,_Arial,_sans-serif] text-white tracking-wider"
   >
     <header class="z-50 flex flex-col items-center bg-black p-8 md:p-12 w-full">
-      <div
-        class="mb-4 font-serif font-normal text-4xl md:text-5xl text-center tracking-wide"
-      >
-        Goldsabertooth
+      <div class="flex flex-row justify-center items-center mb-4 w-full">
+        <a
+          href="https://www.instagram.com/goldsabertooth"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+          class="inline-flex justify-center items-center shadow-sm hover:shadow-orange-600/30 mr-4 p-1.5 border border-white/40 hover:border-orange-600 rounded-full w-10 h-10 transition-all duration-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <rect
+              width="20"
+              height="20"
+              x="2"
+              y="2"
+              rx="6"
+              stroke="currentColor"
+              stroke-width="2"></rect>
+            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"
+            ></circle>
+            <circle cx="17" cy="7" r="1.5" fill="currentColor"></circle>
+          </svg>
+        </a>
+        <span
+          class="font-serif font-normal text-4xl md:text-5xl text-center uppercase tracking-wide"
+          >GOLDSABERTOOTH</span
+        >
+        <a
+          href="https://www.x.com/goldsabertooth"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="X (Twitter)"
+          class="inline-flex justify-center items-center shadow-sm hover:shadow-orange-600/30 ml-4 p-1.5 border border-white/40 hover:border-orange-600 rounded-full w-10 h-10 transition-all duration-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 4l16 16M20 4L4 20"></path>
+          </svg>
+        </a>
       </div>
       <nav class="flex flex-col items-center w-full">
+        <div class="flex flex-row justify-center items-center gap-6 mb-4">
+          <!-- Socials removed from here -->
+        </div>
         <ul
-          class="flex flex-row gap-10 md:gap-16 mb-4 font-normal text-lg md:text-xl text-center tracking-wide"
+          class="flex flex-row gap-10 md:gap-16 font-normal text-lg md:text-xl text-center tracking-wide"
         >
           <li>
             <a
               href="/"
-              class="hover:text-orange-600 transition-colors duration-200"
-              >Home</a
-            >
+              class={`relative px-2 pb-1 transition-colors duration-200 group ${currentPath === "/" ? "text-orange-600" : "hover:text-orange-600"}`}
+              >Home
+              <span
+                class={`absolute left-0 -bottom-1 h-1 rounded-full w-full transition-all duration-300 ${currentPath === "/" ? "bg-orange-600" : "bg-orange-600 opacity-0 group-hover:opacity-100 group-hover:w-full w-0"}`}
+              ></span>
+            </a>
           </li>
           <li>
             <a
               href="/about"
-              class="hover:text-orange-600 transition-colors duration-200"
-              >About</a
-            >
+              class={`relative px-2 pb-1 transition-colors duration-200 group ${currentPath === "/about" ? "text-orange-600" : "hover:text-orange-600"}`}
+              >About
+              <span
+                class={`absolute left-0 -bottom-1 h-1 rounded-full w-full transition-all duration-300 ${currentPath === "/about" ? "bg-orange-600" : "bg-orange-600 opacity-0 group-hover:opacity-100 group-hover:w-full w-0"}`}
+              ></span>
+            </a>
           </li>
           <li>
             <a
               href="/contact"
-              class="hover:text-orange-600 transition-colors duration-200"
-              >Contact</a
-            >
+              class={`relative px-2 pb-1 transition-colors duration-200 group ${currentPath === "/contact" ? "text-orange-600" : "hover:text-orange-600"}`}
+              >Contact
+              <span
+                class={`absolute left-0 -bottom-1 h-1 rounded-full w-full transition-all duration-300 ${currentPath === "/contact" ? "bg-orange-600" : "bg-orange-600 opacity-0 group-hover:opacity-100 group-hover:w-full w-0"}`}
+              ></span>
+            </a>
           </li>
-          <li>
+          <!-- <li>
             <a
               href="/portfolio"
-              class="hover:text-orange-600 transition-colors duration-200"
-              >Portfolio</a
-            >
-          </li>
+              class={`relative px-2 pb-1 transition-colors duration-200 group ${currentPath === "/portfolio" ? "text-orange-600" : "hover:text-orange-600"}`}
+              >Portfolio
+              <span
+                class={`absolute left-0 -bottom-1 h-1 rounded-full w-full transition-all duration-300 ${currentPath === "/portfolio" ? "bg-orange-600" : "bg-orange-600 opacity-0 group-hover:opacity-100 group-hover:w-full w-0"}`}
+              ></span>
+            </a>
+          </li> -->
           <li>
             <a
-              href="/shop"
-              class="hover:text-orange-600 transition-colors duration-200"
-              >Shop</a
-            >
+              href="https://www.etsy.com/shop/GOLDSABERTOOTH"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative px-2 pb-1 hover:text-orange-600 transition-colors duration-200"
+              >Shop
+              <span
+                class="-bottom-1 left-0 absolute bg-orange-600 opacity-0 group-hover:opacity-100 rounded-full w-0 w-full group-hover:w-full h-1 transition-all duration-300"
+              ></span>
+            </a>
           </li>
         </ul>
-        <div class="flex flex-row justify-center gap-6">
-          <a
-            href="https://www.instagram.com/goldsabertooth"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            class="hover:text-orange-600 transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <rect
-                width="20"
-                height="20"
-                x="2"
-                y="2"
-                rx="6"
-                stroke="currentColor"
-                stroke-width="2"></rect>
-              <circle
-                cx="12"
-                cy="12"
-                r="5"
-                stroke="currentColor"
-                stroke-width="2"></circle>
-              <circle cx="17" cy="7" r="1.5" fill="currentColor"></circle>
-            </svg>
-          </a>
-          <a
-            href="https://www.x.com/goldsabertooth"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="X (Twitter)"
-            class="hover:text-orange-600 transition-colors duration-200"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M4 4l16 16M20 4L4 20"></path>
-            </svg>
-          </a>
-        </div>
       </nav>
     </header>
     <main class="flex-1 overflow-y-auto">
