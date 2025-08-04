@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FilterBar from '../../components/ui/FilterBar';
+import ProductGrid from '../../components/ui/ProductGrid';
+import { getProductsByTags } from '../../lib/shopify';
+
+// Get query params
+const url = new URL(Astro.request.url);
+const tagParam = url.searchParams.get('tag');
+const selectedTags = tagParam ? tagParam.split(',').filter(Boolean) : [];
+
+// Get products based on selected tags
+const { products, pageInfo } = await getProductsByTags(
+  selectedTags.length > 0 ? selectedTags : null,
+  null,
+  24
+);
+
+// SEO
+const title = selectedTags.length > 0 
+  ? `${selectedTags.join(', ')} - Underground MTG Art | Goldsabertooth`
+  : 'Shop Underground MTG Art | Goldsabertooth';
+
+const description = selectedTags.length > 0
+  ? `Browse our psychedelic ${selectedTags.join(' and ')} collection. Bold street art meets Magic: The Gathering.`
+  : 'Shop psychedelic Magic: The Gathering art, playmats, tokens, stickers, and apparel. Underground street art for rebellious planeswalkers.';
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="min-h-screen py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Page Header -->
+      <div class="text-center mb-8">
+        <h1 class="graffiti text-electric-blue mb-4">
+          {selectedTags.length > 0 ? selectedTags.join(' + ').toUpperCase() : 'ALL ART'}
+        </h1>
+        <p class="font-body text-lg text-paper max-w-2xl mx-auto">
+          {selectedTags.length > 0 
+            ? `Dive deep into our ${selectedTags.join(' and ')} collection. Each piece tells a story of rebellion and magic.`
+            : 'Every piece in our underground collection. Bold, psychedelic, and unapologetically chaotic.'
+          }
+        </p>
+      </div>
+
+      <!-- Filter Bar -->
+      <FilterBar 
+        selectedTags={selectedTags}
+        onTagsChange={() => {}} 
+        client:load 
+      />
+
+      <!-- Products Grid -->
+      {products.length > 0 ? (
+        <ProductGrid 
+          initialProducts={products}
+          hasNextPage={pageInfo.hasNextPage}
+          endCursor={pageInfo.endCursor}
+          selectedTags={selectedTags}
+          client:load 
+        />
+      ) : (
+        <div class="text-center py-16">
+          <div class="comic-border bg-paper p-8 max-w-md mx-auto">
+            <h2 class="font-display text-2xl text-ink mb-4 outline-text rotate-1">
+              NO CHAOS FOUND
+            </h2>
+            <p class="font-body text-gray-600 mb-6">
+              {selectedTags.length > 0 
+                ? `No products found for ${selectedTags.join(' + ')}. Try different filters or browse all art.`
+                : 'Our underground collective is still cooking up some chaos. Check back soon!'
+              }
+            </p>
+            <a 
+              href={selectedTags.length > 0 ? '/shop' : '/'}
+              class="inline-block px-6 py-3 font-display text-lg comic-border bg-electric-blue hover:bg-electric-blue-dark text-ink btn-psychedelic transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink"
+            >
+              {selectedTags.length > 0 ? 'BROWSE ALL ART' : 'BACK TO HOME'}
+            </a>
+          </div>
+        </div>
+      )}
+
+      <!-- Back to top -->
+      <div class="text-center mt-12">
+        <button 
+          onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+          class="px-4 py-2 font-body text-sm comic-border-sm bg-paper hover:bg-gray-100 text-ink transition-all duration-200 hover:rotate-1 focus:outline-none focus:ring-2 focus:ring-electric-blue"
+        >
+          ↑ BACK TO TOP
+        </button>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Handle filter changes on client side
+  document.addEventListener('DOMContentLoaded', () => {
+    // Update filter bar when URL changes (browser back/forward)
+    window.addEventListener('popstate', () => {
+      window.location.reload();
+    });
+  });
+</script>

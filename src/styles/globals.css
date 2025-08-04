@@ -1,0 +1,110 @@
+@import './fonts.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ink text-paper font-body;
+    background-image: url('/textures/halftone.png');
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    background-blend-mode: multiply;
+  }
+
+  /* Focus styles */
+  *:focus {
+    @apply outline-none ring-2 ring-electric-blue ring-offset-2 ring-offset-ink;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-ink;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-electric-blue rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-electric-blue-dark;
+  }
+}
+
+@layer components {
+  .outline-text {
+    color: #f8f7f2 !important;
+    font-weight: 900;
+    text-shadow: none;
+    -webkit-text-stroke: none;
+  }
+
+  .comic-border {
+    @apply border-4 border-ink drop-shadow-comic;
+  }
+
+  .comic-border-sm {
+    @apply border-2 border-ink drop-shadow-comic-sm;
+  }
+
+  .rotate-chaotic {
+    transform: rotate(calc(var(--rotation, 0) * 1deg));
+  }
+
+  /* Graffiti-style headings */
+  .graffiti {
+    @apply font-display text-6xl md:text-8xl;
+    transform: rotate(-2deg);
+    color: #f8f7f2 !important;
+    font-weight: 900;
+    text-shadow: none;
+    -webkit-text-stroke: none;
+  }
+
+  .graffiti-sm {
+    @apply font-display text-3xl md:text-4xl;
+    transform: rotate(1deg);
+    color: #f8f7f2 !important;
+    font-weight: 900;
+    text-shadow: none;
+    -webkit-text-stroke: none;
+  }
+
+  /* Psychedelic animations */
+  .psychedelic-pulse {
+    animation: psychedelic-pulse 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes psychedelic-pulse {
+    0% {
+      text-shadow: 0 0 5px #00BFFF, 0 0 10px #00BFFF, 0 0 15px #00BFFF;
+    }
+    25% {
+      text-shadow: 0 0 5px #FF6B35, 0 0 10px #FF6B35, 0 0 15px #FF6B35;
+    }
+    50% {
+      text-shadow: 0 0 5px #32CD32, 0 0 10px #32CD32, 0 0 15px #32CD32;
+    }
+    75% {
+      text-shadow: 0 0 5px #8A2BE2, 0 0 10px #8A2BE2, 0 0 15px #8A2BE2;
+    }
+    100% {
+      text-shadow: 0 0 5px #00BFFF, 0 0 10px #00BFFF, 0 0 15px #00BFFF;
+    }
+  }
+
+  /* Button hover effects */
+  .btn-psychedelic {
+    @apply transition-all duration-300 ease-out;
+    transform: rotate(0deg);
+  }
+
+  .btn-psychedelic:hover {
+    transform: rotate(-1deg) scale(1.02);
+  }
+}

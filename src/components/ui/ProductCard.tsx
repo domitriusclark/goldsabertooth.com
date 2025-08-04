@@ -1,0 +1,128 @@
+import type { Product } from '../../lib/types';
+import Price from './Price';
+import { cx } from '../../utils/classes';
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
+  const featuredImage = product.images[0];
+  const minPrice = product.priceRange.minVariantPrice;
+  const maxPrice = product.priceRange.maxVariantPrice;
+  const hasVariablePrice = minPrice.amount !== maxPrice.amount;
+
+  // Generate random rotation for each card
+  const rotations = ['-rotate-1', 'rotate-1', '-rotate-2', 'rotate-2', 'rotate-0'];
+  const randomRotation = rotations[Math.floor(Math.random() * rotations.length)];
+
+  return (
+    <article
+      className={cx(
+        'group relative comic-border bg-paper overflow-hidden',
+        'transition-all duration-300 hover:scale-105 hover:rotate-0',
+        'focus-within:ring-2 focus-within:ring-electric-blue focus-within:ring-offset-2 focus-within:ring-offset-ink',
+        randomRotation
+      )}
+    >
+      <a 
+        href={`/shop/${product.handle}`}
+        className="block focus:outline-none"
+        aria-label={`View ${product.title} product details`}
+      >
+        {/* Image */}
+        <div className="aspect-square overflow-hidden bg-gray-100">
+          {featuredImage ? (
+            <img
+              src={featuredImage.url}
+              alt={featuredImage.altText || product.title}
+              width={featuredImage.width}
+              height={featuredImage.height}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-200">
+              <span className="text-gray-400 font-body text-sm">No Image</span>
+            </div>
+          )}
+
+          {!product.availableForSale && (
+            <div className="absolute inset-0 bg-ink bg-opacity-75 flex items-center justify-center">
+              <span className="font-display text-xl text-neon-orange outline-text transform -rotate-12">
+                SOLD OUT
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="p-4">
+          <h3 className="font-display text-lg text-ink mb-2 line-clamp-2 group-hover:text-electric-blue transition-colors duration-200">
+            {product.title}
+          </h3>
+          
+          {/* Price */}
+          <div className="flex items-center justify-between">
+            <div className="font-body text-lg font-bold text-ink">
+              {hasVariablePrice ? (
+                <span>
+                  FROM <Price money={minPrice} />
+                </span>
+              ) : (
+                <Price money={minPrice} />
+              )}
+            </div>
+            
+            {product.productType && (
+              <span className="px-2 py-1 text-xs font-body bg-neon-lime text-ink comic-border-sm">
+                {product.productType.toUpperCase()}
+              </span>
+            )}
+          </div>
+
+          {/* Tags */}
+          {product.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-2">
+              {product.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-1 text-xs font-body bg-gray-100 text-gray-600 rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
+              {product.tags.length > 3 && (
+                <span className="px-2 py-1 text-xs font-body bg-gray-100 text-gray-600 rounded-full">
+                  +{product.tags.length - 3}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </a>
+
+      {/* Quick add button (appears on hover) */}
+      <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // TODO: Implement quick add functionality
+            console.log('Quick add:', product.id);
+          }}
+          disabled={!product.availableForSale}
+          className={cx(
+            'w-full py-2 font-display text-sm comic-border-sm',
+            'bg-electric-blue hover:bg-electric-blue-dark text-ink',
+            'btn-psychedelic transition-all duration-200',
+            'focus:outline-none focus:ring-2 focus:ring-electric-blue',
+            !product.availableForSale && 'opacity-50 cursor-not-allowed'
+          )}
+        >
+          {product.availableForSale ? 'QUICK ADD' : 'SOLD OUT'}
+        </button>
+      </div>
+    </article>
+  );
+}

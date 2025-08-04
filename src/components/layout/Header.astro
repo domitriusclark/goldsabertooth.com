@@ -1,0 +1,115 @@
+---
+import MobileMenu from './MobileMenu';
+import CartSidebar from '../ui/CartSidebar';
+---
+
+<header class="sticky top-0 z-30 bg-ink border-b-4 border-electric-blue shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a 
+          href="/" 
+          class="flex items-center space-x-2 group focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink rounded-lg p-1"
+        >
+          <div class="comic-border bg-psychedelic-purple p-2 group-hover:rotate-3 transition-transform duration-200">
+            <span class="font-display text-2xl text-paper outline-text">G</span>
+          </div>
+          <span class="font-display text-xl text-electric-blue outline-text hidden sm:block">
+            GOLDSABERTOOTH
+          </span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <a 
+          href="/shop" 
+          class="px-4 py-2 font-display text-lg text-paper hover:text-electric-blue transition-colors duration-200 comic-border bg-neon-orange hover:bg-neon-orange-dark hover:rotate-1 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink"
+        >
+          SHOP
+        </a>
+        <a 
+          href="/contact" 
+          class="px-4 py-2 font-display text-lg text-paper hover:text-electric-blue transition-colors duration-200 comic-border bg-neon-lime hover:bg-neon-lime-dark hover:rotate-1 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink"
+        >
+          CONTACT
+        </a>
+        <a 
+          href="#" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="px-4 py-2 font-display text-lg text-paper hover:text-electric-blue transition-colors duration-200 comic-border bg-psychedelic-purple hover:bg-psychedelic-purple-dark hover:rotate-1 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink"
+        >
+          DISCORD
+        </a>
+      </nav>
+
+      <!-- Cart Badge & Mobile Menu -->
+      <div class="flex items-center space-x-4">
+        <!-- Cart Badge -->
+        <button 
+          id="cart-button"
+          class="relative p-2 comic-border bg-electric-blue hover:bg-electric-blue-dark text-ink font-bold hover:rotate-1 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink"
+          aria-label="Shopping cart"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 5H3m4 8v6a1 1 0 001 1h9a1 1 0 001-1v-6m-4 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4h6z"></path>
+          </svg>
+          <!-- Cart count badge -->
+          <span 
+            id="cart-count"
+            class="absolute -top-2 -right-2 bg-neon-orange text-ink text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center comic-border"
+          >
+            0
+          </span>
+        </button>
+
+        <!-- Mobile Menu -->
+        <MobileMenu isOpen={false} onToggle={() => {}} client:load />
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Cart Sidebar -->
+<CartSidebar client:load />
+
+<script>
+  import { useCartStore } from '../../lib/cart';
+
+  // Initialize cart on page load
+  document.addEventListener('DOMContentLoaded', async () => {
+    const cartStore = useCartStore.getState();
+    
+    // Initialize cart
+    await cartStore.init();
+    
+    // Update cart count display
+    const updateCartCount = () => {
+      const state = useCartStore.getState();
+      const count = state.totalQuantity;
+      console.log('🎫 HEADER - Updating cart count:', count);
+      console.log('🎫 HEADER - Cart state:', state.cart);
+      
+      const countElement = document.getElementById('cart-count');
+      if (countElement) {
+        countElement.textContent = count.toString();
+        // Hide badge if count is 0
+        countElement.style.display = count > 0 ? 'flex' : 'none';
+      }
+    };
+
+    // Subscribe to cart changes
+    useCartStore.subscribe(updateCartCount);
+    updateCartCount(); // Initial update
+
+    // Cart button click handler
+    const cartButton = document.getElementById('cart-button');
+    if (cartButton) {
+      cartButton.addEventListener('click', () => {
+        useCartStore.getState().toggleCart();
+      });
+    }
+  });
+</script>

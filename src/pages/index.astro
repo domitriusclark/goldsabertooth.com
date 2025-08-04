@@ -1,27 +1,62 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/ui/Hero';
+import BrandStrip from '../components/ui/BrandStrip';
+import ProductGrid from '../components/ui/ProductGrid';
+import { getProductsByTags } from '../lib/shopify';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Get featured products for homepage (8 random products)
+const { products: featuredProducts, pageInfo } = await getProductsByTags(null, null, 8);
 ---
 
-<Layout>
-  <section
-    class="flex justify-center items-center bg-secondary -mx-8 -mt-32 h-screen text-center"
-  >
-    <div class="flex flex-col items-center px-8 max-w-3xl">
-      <img
-        src="https://res.cloudinary.com/treasurechest/image/upload/v1747186859/timt_o37kyp.webp"
-        alt="Tim Taranto portrait"
-        class="shadow-2xl mx-auto mb-8 border-4 border-white rounded-full w-48 md:w-72 h-48 md:h-72 object-cover"
-      />
-      <p class="opacity-70 text-base tracking-widest">CEDH Grinder & Artist</p>
+<BaseLayout>
+  <!-- Hero Section -->
+  <Hero client:load />
+  
+  <!-- Brand Strip -->
+  <BrandStrip client:load />
+  
+  <!-- Featured Products -->
+  <section class="py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="graffiti-sm text-neon-orange mb-4">
+          FEATURED CHAOS
+        </h2>
+        <p class="font-body text-lg text-paper max-w-2xl mx-auto">
+          Fresh drops from the underground. Each piece is a rebellion against the ordinary.
+        </p>
+      </div>
+      
+      {featuredProducts.length > 0 ? (
+        <ProductGrid 
+          initialProducts={featuredProducts}
+          hasNextPage={false}
+          client:load 
+        />
+      ) : (
+        <div class="text-center py-12">
+          <div class="comic-border bg-paper p-8 max-w-md mx-auto">
+            <h3 class="font-display text-2xl text-ink mb-4 outline-text rotate-1">
+              COMING SOON
+            </h3>
+            <p class="font-body text-gray-600 mb-6">
+              Our underground art collective is preparing something epic. 
+              Join our newsletter to be the first to know when the chaos drops.
+            </p>
+          </div>
+        </div>
+      )}
+      
+      <!-- CTA to shop -->
+      <div class="text-center mt-12">
+        <a 
+          href="/shop"
+          class="inline-block px-8 py-4 text-xl font-display comic-border bg-electric-blue hover:bg-electric-blue-dark text-ink btn-psychedelic transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink"
+        >
+          EXPLORE ALL ART →
+        </a>
+      </div>
     </div>
   </section>
-
-  <section class="py-16">
-    <div class="mx-auto max-w-[1400px]">
-      <!-- Featured content will go here -->
-    </div>
-  </section>
-</Layout>
+</BaseLayout>

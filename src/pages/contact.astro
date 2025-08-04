@@ -1,7 +1,277 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'Contact Us - Underground MTG Art | Goldsabertooth';
+const description = 'Get in touch with our underground art collective. Custom commissions, wholesale inquiries, or just want to chat about psychedelic MTG art.';
 ---
 
-<Layout title="Contact - Goldsabertooth">
-  <!-- Contact form content removed for a fresh start -->
-</Layout>
+<BaseLayout title={title} description={description}>
+  <div class="min-h-screen py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="graffiti text-electric-blue mb-6">
+          GET IN TOUCH
+        </h1>
+        <p class="font-body text-lg text-paper max-w-2xl mx-auto leading-relaxed">
+          Ready to join the underground? Have questions about our psychedelic MTG art? 
+          Need a custom piece for your chaos? We're here to help make magic happen.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        <!-- Contact Form -->
+        <div class="comic-border bg-paper p-8">
+          <h2 class="font-display text-2xl text-ink mb-6 outline-text rotate-1">
+            SEND US A MESSAGE
+          </h2>
+          
+          <form 
+            name="contact" 
+            method="POST" 
+            data-netlify="true" 
+            data-netlify-honeypot="bot-field"
+            class="space-y-6"
+          >
+            <!-- Netlify form fields -->
+            <input type="hidden" name="form-name" value="contact" />
+            
+            <!-- Honeypot field -->
+            <div class="hidden">
+              <label>
+                Don't fill this out if you're human: 
+                <input name="bot-field" />
+              </label>
+            </div>
+
+            <!-- Name -->
+            <div>
+              <label for="name" class="block font-display text-lg text-ink mb-2">
+                NAME *
+              </label>
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                required
+                class="w-full px-4 py-3 comic-border bg-white text-ink placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-electric-blue font-body"
+                placeholder="Your wizard name..."
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label for="email" class="block font-display text-lg text-ink mb-2">
+                EMAIL *
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                class="w-full px-4 py-3 comic-border bg-white text-ink placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-electric-blue font-body"
+                placeholder="your@email.com"
+              />
+            </div>
+
+            <!-- Subject -->
+            <div>
+              <label for="subject" class="block font-display text-lg text-ink mb-2">
+                SUBJECT
+              </label>
+              <select 
+                id="subject" 
+                name="subject"
+                class="w-full px-4 py-3 comic-border bg-white text-ink focus:outline-none focus:ring-2 focus:ring-electric-blue font-body"
+              >
+                <option value="">Select a topic...</option>
+                <option value="custom-commission">Custom Commission</option>
+                <option value="wholesale-inquiry">Wholesale Inquiry</option>
+                <option value="product-question">Product Question</option>
+                <option value="shipping-issue">Shipping Issue</option>
+                <option value="collaboration">Collaboration</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <!-- Message -->
+            <div>
+              <label for="message" class="block font-display text-lg text-ink mb-2">
+                MESSAGE *
+              </label>
+              <textarea 
+                id="message" 
+                name="message" 
+                rows="6" 
+                required
+                class="w-full px-4 py-3 comic-border bg-white text-ink placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-electric-blue font-body resize-y"
+                placeholder="Tell us about your vision for chaos..."
+              ></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit"
+              class="w-full py-4 text-xl font-display comic-border bg-electric-blue hover:bg-electric-blue-dark text-ink btn-psychedelic transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-paper"
+            >
+              SEND THE CHAOS →
+            </button>
+          </form>
+        </div>
+
+        <!-- Contact Info & FAQ -->
+        <div class="space-y-8">
+          
+          <!-- Contact Info -->
+          <div class="comic-border bg-ink p-8">
+            <h2 class="font-display text-2xl text-electric-blue mb-6 outline-text -rotate-1">
+              DIRECT LINES
+            </h2>
+            
+            <div class="space-y-4 font-body text-paper">
+              <div class="flex items-start space-x-3">
+                <span class="text-neon-orange text-xl">📧</span>
+                <div>
+                  <p class="font-medium">Email</p>
+                  <a 
+                    href="mailto:hello@goldsabertooth.com" 
+                    class="text-electric-blue hover:underline"
+                  >
+                    hello@goldsabertooth.com
+                  </a>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <span class="text-neon-lime text-xl">💬</span>
+                <div>
+                  <p class="font-medium">Discord Community</p>
+                  <a 
+                    href="#" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-electric-blue hover:underline"
+                  >
+                    Join our chaos collective
+                  </a>
+                </div>
+              </div>
+              
+              <div class="flex items-start space-x-3">
+                <span class="text-psychedelic-purple text-xl">🛍️</span>
+                <div>
+                  <p class="font-medium">Etsy Store</p>
+                  <a 
+                    href="https://etsy.com/shop/goldsabertooth" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-electric-blue hover:underline"
+                  >
+                    etsy.com/shop/goldsabertooth
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ -->
+          <div class="comic-border bg-paper p-8">
+            <h2 class="font-display text-2xl text-ink mb-6 outline-text rotate-1">
+              QUICK ANSWERS
+            </h2>
+            
+            <div class="space-y-4 font-body text-gray-700">
+              <div>
+                <h3 class="font-medium text-ink mb-1">Custom Commissions?</h3>
+                <p class="text-sm">Yes! We love creating unique pieces. Email us your vision and we'll make magic happen.</p>
+              </div>
+              
+              <div>
+                <h3 class="font-medium text-ink mb-1">Shipping Time?</h3>
+                <p class="text-sm">Most orders ship within 2-3 business days. Custom pieces take 1-2 weeks.</p>
+              </div>
+              
+              <div>
+                <h3 class="font-medium text-ink mb-1">Wholesale Pricing?</h3>
+                <p class="text-sm">We offer wholesale rates for orders of 10+ pieces. Contact us for details.</p>
+              </div>
+              
+              <div>
+                <h3 class="font-medium text-ink mb-1">Returns?</h3>
+                <p class="text-sm">We want you to love your chaos! Contact us within 14 days if something's not right.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Proof -->
+          <div class="comic-border bg-neon-lime p-6 text-center">
+            <h3 class="font-display text-xl text-ink mb-3 outline-text">
+              JOIN THE UNDERGROUND
+            </h3>
+            <p class="font-body text-ink text-sm mb-4">
+              Over 1,000 planeswalkers are already part of our chaotic community.
+            </p>
+            <div class="flex justify-center space-x-4">
+              <a 
+                href="#" 
+                class="p-2 comic-border-sm bg-ink text-neon-lime hover:bg-gray-800 transition-colors"
+                aria-label="Instagram"
+              >
+                📸
+              </a>
+              <a 
+                href="#" 
+                class="p-2 comic-border-sm bg-ink text-neon-lime hover:bg-gray-800 transition-colors"
+                aria-label="Twitter"
+              >
+                🐦
+              </a>
+              <a 
+                href="#" 
+                class="p-2 comic-border-sm bg-ink text-neon-lime hover:bg-gray-800 transition-colors"
+                aria-label="Discord"
+              >
+                💬
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Form submission feedback
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form[name="contact"]');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton) {
+          submitButton.textContent = 'SENDING CHAOS...';
+          submitButton.disabled = true;
+        }
+      });
+    }
+
+    // Check for success/error messages in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+      // Show success message
+      const successDiv = document.createElement('div');
+      successDiv.className = 'fixed top-4 right-4 z-50 comic-border bg-neon-lime p-4 text-ink max-w-md';
+      successDiv.innerHTML = `
+        <h4 class="font-display text-lg mb-2">MESSAGE SENT!</h4>
+        <p class="font-body text-sm">Thanks for reaching out! We'll get back to you within 24 hours.</p>
+        <button onclick="this.parentElement.remove()" class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center text-ink hover:bg-black hover:bg-opacity-10 rounded">×</button>
+      `;
+      document.body.appendChild(successDiv);
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => successDiv.remove(), 5000);
+    }
+  });
+</script>
