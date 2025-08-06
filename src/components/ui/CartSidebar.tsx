@@ -1,55 +1,53 @@
-import { useEffect } from 'react';
-import { useCartStore } from '../../lib/cart';
-import { cx } from '../../utils/classes';
-import Button from './Button';
-import Price from './Price';
+import { useEffect } from "react";
+import { useCartStore } from "../../lib/cart";
+import { cx } from "../../utils/classes";
+import Button from "./Button";
+import Price from "./Price";
 
 export default function CartSidebar() {
-  const { 
-    cart, 
-    isOpen, 
-    isLoading, 
-    error, 
-    isEmpty, 
-    subtotal,
-    closeCart, 
-    updateQuantity, 
-    remove, 
-    clearError 
+  const {
+    cart,
+    isOpen,
+    isLoading,
+    error,
+    closeCart,
+    updateQuantity,
+    remove,
+    clearError,
   } = useCartStore();
 
-  // Debug logging
-  useEffect(() => {
-    console.log('🎯 CART SIDEBAR - Cart state changed:', {
-      cart,
-      isEmpty,
-      totalQuantity: cart?.totalQuantity || 0,
-      linesCount: cart?.lines?.length || 0
-    });
-  }, [cart, isEmpty]);
+  // Compute values directly from cart
+  const totalQuantity = cart?.totalQuantity || 0;
+  const isEmpty = totalQuantity === 0;
+  const subtotal = !cart
+    ? "$0.00"
+    : new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: cart.cost.subtotalAmount.currencyCode,
+      }).format(parseFloat(cart.cost.subtotalAmount.amount));
 
   // Close cart on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         closeCart();
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, closeCart]);
 
   // Prevent body scroll when cart is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -65,7 +63,7 @@ export default function CartSidebar() {
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+        className="z-40 fixed inset-0 bg-black bg-opacity-50"
         onClick={closeCart}
         aria-hidden="true"
       />
@@ -73,21 +71,21 @@ export default function CartSidebar() {
       {/* Sidebar */}
       <div
         className={cx(
-          'fixed top-0 right-0 h-full w-full max-w-md bg-paper z-50',
-          'transform transition-transform duration-300 ease-out',
-          'comic-border shadow-2xl overflow-hidden',
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+          "fixed top-0 right-0 h-full w-full max-w-md bg-paper z-50",
+          "transform transition-transform duration-300 ease-out",
+          "comic-border shadow-2xl overflow-hidden",
+          isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b-2 border-ink bg-electric-blue">
-            <h2 className="font-display text-xl text-ink font-black">
+          <div className="flex justify-between items-center bg-electric-blue p-4 border-ink border-b-2">
+            <h2 className="font-display font-black text-ink text-xl">
               YOUR CHAOS ({cart?.totalQuantity || 0})
             </h2>
             <button
               onClick={closeCart}
-              className="w-8 h-8 flex items-center justify-center comic-border-sm bg-neon-orange hover:bg-neon-orange-dark text-ink font-bold transition-colors"
+              className="flex justify-center items-center bg-neon-orange hover:bg-neon-orange-dark comic-border-sm w-8 h-8 font-bold text-ink transition-colors"
               aria-label="Close cart"
             >
               ×
@@ -96,11 +94,11 @@ export default function CartSidebar() {
 
           {/* Error Message */}
           {error && (
-            <div className="p-4 bg-neon-orange border-b-2 border-ink">
-              <p className="text-ink text-sm font-body">⚠️ {error}</p>
+            <div className="bg-neon-orange p-4 border-ink border-b-2">
+              <p className="font-body text-ink text-sm">⚠️ {error}</p>
               <button
                 onClick={clearError}
-                className="underline text-xs hover:no-underline mt-1"
+                className="mt-1 text-xs underline hover:no-underline"
               >
                 Dismiss
               </button>
@@ -109,25 +107,28 @@ export default function CartSidebar() {
 
           {/* Loading State */}
           {isLoading && (
-            <div className="p-4 bg-neon-lime border-b-2 border-ink">
-              <p className="text-ink text-sm font-body">🔄 Updating cart...</p>
+            <div className="bg-neon-lime p-4 border-ink border-b-2">
+              <p className="font-body text-ink text-sm">🔄 Updating cart...</p>
             </div>
           )}
 
           {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 p-4 overflow-y-auto">
             {isEmpty ? (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">🛒</div>
-                <h3 className="font-display text-xl text-ink mb-2">Empty Cart</h3>
-                <p className="text-gray-600 font-body mb-6">
-                  Your chaotic collection awaits! Add some underground art to get started.
+              <div className="py-12 text-center">
+                <div className="mb-4 text-6xl">🛒</div>
+                <h3 className="mb-2 font-display text-ink text-xl">
+                  Empty Cart
+                </h3>
+                <p className="mb-6 font-body text-gray-600">
+                  Your chaotic collection awaits! Add some underground art to
+                  get started.
                 </p>
                 <Button
                   variant="primary"
                   onClick={() => {
                     closeCart();
-                    window.location.href = '/shop';
+                    window.location.href = "/shop";
                   }}
                 >
                   BROWSE ART
@@ -136,18 +137,23 @@ export default function CartSidebar() {
             ) : (
               <div className="space-y-4">
                 {cart?.lines.map((line) => (
-                  <div key={line.id} className="comic-border bg-paper p-4">
+                  <div key={line.id} className="bg-paper p-4 comic-border">
                     <div className="flex gap-4">
                       {/* Product Image */}
                       {line.merchandise.product.featuredImage ? (
                         <img
                           src={line.merchandise.product.featuredImage.url}
-                          alt={line.merchandise.product.featuredImage.altText || line.merchandise.product.title}
-                          className="w-16 h-16 object-cover comic-border-sm"
+                          alt={
+                            line.merchandise.product.featuredImage.altText ||
+                            line.merchandise.product.title
+                          }
+                          className="comic-border-sm w-16 h-16 object-cover"
                         />
                       ) : (
-                        <div className="w-16 h-16 bg-gray-200 comic-border-sm flex items-center justify-center">
-                          <span className="text-xs text-gray-500">No Image</span>
+                        <div className="flex justify-center items-center bg-gray-200 comic-border-sm w-16 h-16">
+                          <span className="text-gray-500 text-xs">
+                            No Image
+                          </span>
                         </div>
                       )}
 
@@ -157,41 +163,50 @@ export default function CartSidebar() {
                           {line.merchandise.product.title}
                         </h4>
                         {line.merchandise.selectedOptions.length > 0 && (
-                          <p className="text-xs text-gray-600 font-body">
-                            {line.merchandise.selectedOptions.map(option => option.value).join(', ')}
+                          <p className="font-body text-gray-600 text-xs">
+                            {line.merchandise.selectedOptions
+                              .map((option) => option.value)
+                              .join(", ")}
                           </p>
                         )}
 
                         {/* Quantity Controls */}
-                        <div className="flex items-center justify-between mt-2">
+                        <div className="flex justify-between items-center mt-2">
                           <div className="flex items-center gap-2">
                             <button
-                              onClick={() => updateQuantity(line.id, Math.max(0, line.quantity - 1))}
+                              onClick={() =>
+                                updateQuantity(
+                                  line.id,
+                                  Math.max(0, line.quantity - 1)
+                                )
+                              }
                               disabled={isLoading || line.quantity <= 1}
-                              className="w-6 h-6 flex items-center justify-center text-xs bg-gray-200 hover:bg-gray-300 disabled:opacity-50 comic-border-sm"
+                              className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 disabled:opacity-50 comic-border-sm w-6 h-6 text-black text-xs"
                             >
                               −
                             </button>
-                            <span className="text-sm font-medium min-w-[2ch] text-center">
+                            <span className="min-w-[2ch] font-medium text-black text-sm text-center">
                               {line.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(line.id, line.quantity + 1)}
+                              onClick={() =>
+                                updateQuantity(line.id, line.quantity + 1)
+                              }
                               disabled={isLoading}
-                              className="w-6 h-6 flex items-center justify-center text-xs bg-gray-200 hover:bg-gray-300 disabled:opacity-50 comic-border-sm"
+                              className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 disabled:opacity-50 comic-border-sm w-6 h-6 text-black text-xs"
                             >
                               +
                             </button>
                           </div>
 
                           <div className="text-right">
-                            <div className="font-bold text-sm">
+                            <div className="font-bold text-black text-sm">
                               <Price money={line.cost.totalAmount} />
                             </div>
                             <button
                               onClick={() => remove(line.id)}
                               disabled={isLoading}
-                              className="text-xs text-red-600 hover:text-red-800 underline disabled:opacity-50"
+                              className="disabled:opacity-50 text-red-600 hover:text-red-800 text-xs underline"
                             >
                               Remove
                             </button>
@@ -207,25 +222,27 @@ export default function CartSidebar() {
 
           {/* Footer - Checkout */}
           {!isEmpty && cart && (
-            <div className="border-t-2 border-ink p-4 bg-ink">
+            <div className="bg-ink p-4 border-ink border-t-2">
               <div className="flex justify-between items-center mb-4">
-                <span className="font-display text-lg text-paper">SUBTOTAL:</span>
-                <span className="font-display text-xl text-electric-blue">
+                <span className="font-display text-paper text-lg">
+                  SUBTOTAL:
+                </span>
+                <span className="font-display text-electric-blue text-xl">
                   {subtotal}
                 </span>
               </div>
-              
+
               <Button
                 variant="primary"
                 size="lg"
                 onClick={handleCheckout}
                 disabled={isLoading}
-                className="w-full text-xl py-4"
+                className="py-4 w-full text-xl"
               >
                 CHECKOUT →
               </Button>
-              
-              <p className="text-xs text-gray-400 text-center mt-2 font-body">
+
+              <p className="mt-2 font-body text-gray-400 text-xs text-center">
                 Secure checkout powered by Shopify
               </p>
             </div>

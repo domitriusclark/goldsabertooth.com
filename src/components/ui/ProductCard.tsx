@@ -1,20 +1,52 @@
+import { useState } from 'react';
 import type { Product } from '../../lib/types';
 import Price from './Price';
 import { cx } from '../../utils/classes';
+import { useCartStore } from '../../lib/cart';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const [isQuickAdding, setIsQuickAdding] = useState(false);
+  const [showQuickSuccess, setShowQuickSuccess] = useState(false);
+  const { add: addToCart, openCart, isLoading: cartLoading } = useCartStore();
+  
   const featuredImage = product.images[0];
   const minPrice = product.priceRange.minVariantPrice;
   const maxPrice = product.priceRange.maxVariantPrice;
   const hasVariablePrice = minPrice.amount !== maxPrice.amount;
+  
+  // Get default variant (first available variant)
+  const defaultVariant = product.variants.find(variant => variant.availableForSale) || product.variants[0];
 
   // Generate random rotation for each card
   const rotations = ['-rotate-1', 'rotate-1', '-rotate-2', 'rotate-2', 'rotate-0'];
   const randomRotation = rotations[Math.floor(Math.random() * rotations.length)];
+
+  const handleQuickAdd = async () => {
+    if (!defaultVariant || !product.availableForSale) return;
+
+    setIsQuickAdding(true);
+    
+    try {
+      await addToCart(defaultVariant.id, 1);
+      
+      // Show success state
+      setShowQuickSuccess(true);
+      
+      // Open cart sidebar to show the added item
+      setTimeout(() => {
+        openCart();
+        setShowQuickSuccess(false);
+      }, 800);
+    } catch (error) {
+      console.error('Failed to quick add to cart:', error);
+    } finally {
+      setIsQuickAdding(false);
+    }
+  };
 
   return (
     <article
@@ -108,19 +140,28 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            // TODO: Implement quick add functionality
-            console.log('Quick add:', product.id);
+            handleQuickAdd();
           }}
-          disabled={!product.availableForSale}
+          disabled={!product.availableForSale || isQuickAdding || cartLoading}
           className={cx(
             'w-full py-2 font-display text-sm comic-border-sm',
-            'bg-electric-blue hover:bg-electric-blue-dark text-ink',
             'btn-psychedelic transition-all duration-200',
             'focus:outline-none focus:ring-2 focus:ring-electric-blue',
-            !product.availableForSale && 'opacity-50 cursor-not-allowed'
+            showQuickSuccess 
+              ? 'bg-neon-lime hover:bg-neon-lime-dark animate-pulse'
+              : 'bg-electric-blue hover:bg-electric-blue-dark',
+            'text-ink',
+            (!product.availableForSale || isQuickAdding || cartLoading) && 'opacity-50 cursor-not-allowed'
           )}
         >
-          {product.availableForSale ? 'QUICK ADD' : 'SOLD OUT'}
+          {!product.availableForSale 
+            ? 'SOLD OUT' 
+            : isQuickAdding 
+              ? 'ADDING...' 
+              : showQuickSuccess 
+                ? 'ADDED!' 
+                : 'QUICK ADD'
+          }
         </button>
       </div>
     </article>

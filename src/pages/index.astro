@@ -1,58 +1,60 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/ui/Hero';
-import BrandStrip from '../components/ui/BrandStrip';
-import ProductGrid from '../components/ui/ProductGrid';
-import { getProductsByTags } from '../lib/shopify';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/ui/Hero";
+import BrandStrip from "../components/ui/BrandStrip";
+import ProductGrid from "../components/ui/ProductGrid";
+import { getProductsByTags } from "../lib/shopify";
 
 // Get featured products for homepage (8 random products)
-const { products: featuredProducts, pageInfo } = await getProductsByTags(null, null, 8);
+const { products: featuredProducts, pageInfo } = await getProductsByTags(
+  null,
+  null,
+  8
+);
 ---
 
 <BaseLayout>
   <!-- Hero Section -->
   <Hero client:load />
-  
-  <!-- Brand Strip -->
-  <BrandStrip client:load />
-  
+
   <!-- Featured Products -->
-  <section class="py-16 px-4">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12">
-        <h2 class="graffiti-sm text-neon-orange mb-4">
-          FEATURED CHAOS
-        </h2>
-        <p class="font-body text-lg text-paper max-w-2xl mx-auto">
-          Fresh drops from the underground. Each piece is a rebellion against the ordinary.
+  <section class="px-4 py-16 border-electric-blue border-y-4">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-12 text-center">
+        <h2 class="mb-4 text-neon-orange graffiti-sm">FEATURED ITEMS</h2>
+        <p class="mx-auto max-w-2xl font-body text-paper text-lg">
+          Fresh drops from the underground. Each piece is a rebellion against
+          the ordinary.
         </p>
       </div>
-      
-      {featuredProducts.length > 0 ? (
-        <ProductGrid 
-          initialProducts={featuredProducts}
-          hasNextPage={false}
-          client:load 
-        />
-      ) : (
-        <div class="text-center py-12">
-          <div class="comic-border bg-paper p-8 max-w-md mx-auto">
-            <h3 class="font-display text-2xl text-ink mb-4 outline-text rotate-1">
-              COMING SOON
-            </h3>
-            <p class="font-body text-gray-600 mb-6">
-              Our underground art collective is preparing something epic. 
-              Join our newsletter to be the first to know when the chaos drops.
-            </p>
+
+      {
+        featuredProducts.length > 0 ? (
+          <ProductGrid
+            initialProducts={featuredProducts}
+            hasNextPage={false}
+            client:load
+          />
+        ) : (
+          <div class="py-12 text-center">
+            <div class="bg-paper mx-auto p-8 comic-border max-w-md">
+              <h3 class="mb-4 outline-text font-display text-ink text-2xl rotate-1">
+                COMING SOON
+              </h3>
+              <p class="mb-6 font-body text-gray-600">
+                Our underground art collective is preparing something epic. Join
+                our newsletter to be the first to know when the chaos drops.
+              </p>
+            </div>
           </div>
-        </div>
-      )}
-      
+        )
+      }
+
       <!-- CTA to shop -->
-      <div class="text-center mt-12">
-        <a 
+      <div class="mt-12 text-center">
+        <a
           href="/shop"
-          class="inline-block px-8 py-4 text-xl font-display comic-border bg-electric-blue hover:bg-electric-blue-dark text-ink btn-psychedelic transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink"
+          class="inline-block bg-electric-blue hover:bg-electric-blue-dark px-8 py-4 comic-border focus:outline-none focus:ring-2 focus:ring-electric-blue focus:ring-offset-2 focus:ring-offset-ink font-display text-ink text-xl transition-all duration-200 btn-psychedelic"
         >
           EXPLORE ALL ART →
         </a>

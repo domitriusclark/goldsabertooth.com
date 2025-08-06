@@ -88,9 +88,7 @@ import CartSidebar from '../ui/CartSidebar';
     // Update cart count display
     const updateCartCount = () => {
       const state = useCartStore.getState();
-      const count = state.totalQuantity;
-      console.log('🎫 HEADER - Updating cart count:', count);
-      console.log('🎫 HEADER - Cart state:', state.cart);
+      const count = state.cart?.totalQuantity || 0;
       
       const countElement = document.getElementById('cart-count');
       if (countElement) {
@@ -101,7 +99,7 @@ import CartSidebar from '../ui/CartSidebar';
     };
 
     // Subscribe to cart changes
-    useCartStore.subscribe(updateCartCount);
+    const unsubscribe = useCartStore.subscribe(updateCartCount);
     updateCartCount(); // Initial update
 
     // Cart button click handler
