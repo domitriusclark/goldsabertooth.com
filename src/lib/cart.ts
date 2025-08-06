@@ -10,11 +10,6 @@ interface CartStore {
   error: string | null;
   isOpen: boolean;
 
-  // Computed
-  totalQuantity: number;
-  isEmpty: boolean;
-  subtotal: string;
-
   // Actions
   init: () => Promise<void>;
   add: (variantId: string, quantity?: number) => Promise<void>;
@@ -29,6 +24,7 @@ interface CartStore {
   toggleCart: () => void;
 }
 
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
@@ -37,24 +33,6 @@ export const useCartStore = create<CartStore>()(
       isLoading: false,
       error: null,
       isOpen: false,
-
-      // Computed properties
-      get totalQuantity() {
-        return get().cart?.totalQuantity || 0;
-      },
-
-      get isEmpty() {
-        return get().totalQuantity === 0;
-      },
-
-      get subtotal() {
-        const cart = get().cart;
-        if (!cart) return '$0.00';
-        return new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: cart.cost.subtotalAmount.currencyCode,
-        }).format(parseFloat(cart.cost.subtotalAmount.amount));
-      },
 
       // Initialize cart - create if doesn't exist
       init: async () => {
@@ -90,31 +68,19 @@ export const useCartStore = create<CartStore>()(
         try {
           // Create cart if it doesn't exist
           if (!cart) {
-            console.log('🛒 Creating new cart...');
             cart = await createCart();
-            console.log('🛒 New cart created:', cart);
             set({ cart });
           }
 
           // Add item to cart
-          console.log('🛒 Adding item to cart ID:', cart.id);
           const updatedCart = await addToCart(cart.id, variantId, quantity);
-          console.log('🛒 Updated cart received:', updatedCart);
-          console.log('🛒 Cart lines count:', updatedCart.lines?.length || 0);
-          console.log('🛒 Cart total quantity:', updatedCart.totalQuantity);
           
           set({ 
             cart: updatedCart, 
-            isLoading: false 
+            isLoading: false
           });
-          
-          // Log final state
-          const finalState = get();
-          console.log('🛒 Final cart state:', finalState.cart);
-          console.log('🛒 Final total quantity:', finalState.totalQuantity);
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to add item to cart';
-          console.error('🛒 ADD TO CART ERROR:', error);
           set({ 
             error: errorMessage, 
             isLoading: false 
@@ -133,7 +99,7 @@ export const useCartStore = create<CartStore>()(
           const updatedCart = await updateCartLines(cart.id, [{ id: lineId, quantity }]);
           set({ 
             cart: updatedCart, 
-            isLoading: false 
+            isLoading: false
           });
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to update cart';
@@ -156,7 +122,7 @@ export const useCartStore = create<CartStore>()(
           const updatedCart = await removeCartLines(cart.id, [lineId]);
           set({ 
             cart: updatedCart, 
-            isLoading: false 
+            isLoading: false
           });
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to remove item';
@@ -202,13 +168,16 @@ export const useCartStore = create<CartStore>()(
       partialize: (state) => ({
         cart: state.cart,
       }),
+      onRehydrateStorage: () => () => {
+        // Cart rehydrated successfully
+      },
     }
   )
 );
 
 // Hook for getting cart count (useful for header badge)
 export function useCartCount() {
-  return useCartStore((state) => state.totalQuantity);
+  return useCartStore((state) => state.cart?.totalQuantity || 0);
 }
 
 // Hook for cart loading state

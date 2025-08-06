@@ -3,16 +3,7 @@ import { cx } from "../../utils/classes";
 
 export default function Hero() {
   return (
-    <section className="relative flex justify-center items-center px-4 py-16 min-h-[70vh] overflow-hidden">
-      {/* Background textures */}
-      <div
-        className="absolute inset-0 bg-swirl bg-repeat opacity-20"
-        style={{ backgroundSize: "200px 200px" }}
-      />
-      <div
-        className="absolute inset-0 bg-halftone bg-repeat opacity-10"
-        style={{ backgroundSize: "150px 150px" }}
-      />
+    <section className="relative flex justify-center items-center bg-black px-4 py-16 min-h-[70vh] overflow-hidden">
 
       {/* Floating geometric shapes */}
       <div className="top-20 left-10 absolute bg-electric-blue opacity-60 comic-border w-16 h-16 rotate-45 animate-bounce" />
@@ -50,7 +41,7 @@ export default function Hero() {
             onClick={() => (window.location.href = "/shop")}
             className="px-8 py-4 min-w-48 text-xl"
           >
-            SHOP THE CHAOS
+            SHOP
           </Button>
 
           <a
@@ -69,8 +60,7 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Features */}
-        <div className="gap-6 grid grid-cols-1 md:grid-cols-3 text-center">
+        {/* <div className="gap-6 grid grid-cols-1 md:grid-cols-3 text-center">
           <div className="bg-paper p-6 comic-border rotate-1 hover:rotate-0 transition-transform duration-300">
             <div className="mb-2 text-3xl">🎨</div>
             <h3 className="mb-2 font-display text-ink text-lg">ORIGINAL ART</h3>
@@ -99,7 +89,7 @@ export default function Hero() {
               gone
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

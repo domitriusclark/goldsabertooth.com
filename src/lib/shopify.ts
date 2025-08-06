@@ -432,8 +432,6 @@ export async function createCart(): Promise<Cart> {
     };
   }>(query);
 
-  console.log('🏪 SHOPIFY - createCart response:', response);
-
   if (response.cartCreate.userErrors.length > 0) {
     throw new Error(response.cartCreate.userErrors[0].message);
   }
@@ -444,7 +442,6 @@ export async function createCart(): Promise<Cart> {
     lines: response.cartCreate.cart.lines.edges.map(({ node }: any) => node),
   };
 
-  console.log('🏪 SHOPIFY - createCart transformed cart:', cart);
   return cart;
 }
 
@@ -551,9 +548,6 @@ export async function addToCart(
     };
   }>(query, variables);
 
-  console.log('🏪 SHOPIFY - addToCart response:', response);
-  console.log('🏪 SHOPIFY - addToCart variables:', variables);
-
   if (response.cartLinesAdd.userErrors.length > 0) {
     throw new Error(response.cartLinesAdd.userErrors[0].message);
   }
@@ -564,8 +558,6 @@ export async function addToCart(
     lines: response.cartLinesAdd.cart.lines.edges.map(({ node }: any) => node),
   };
 
-  console.log('🏪 SHOPIFY - addToCart transformed cart:', cart);
-  console.log('🏪 SHOPIFY - addToCart cart lines:', cart.lines);
   return cart;
 }
 
