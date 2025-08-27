@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:netlify": "astro build",
     "preview": "astro preview",
     "lint": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "clean": "rm -rf dist .astro",
+    "prebuild": "npm run clean"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
